@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -43,10 +45,8 @@ class MainActivity : ComponentActivity() {
             }
             val size by animateDpAsState(targetValue = sizeState,
 
-                tween(
-                    durationMillis = 3000,
-                    delayMillis = 300,
-                    easing = LinearOutSlowInEasing
+                spring(
+                    Spring.DampingRatioHighBouncy
                 )
             )
 
