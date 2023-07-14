@@ -25,43 +25,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val constraints = ConstraintSet {
-                val greenBox = createRefFor("greenbox")
-                val blueBox = createRefFor("bluebox")
-                val guideline = createGuidelineFromTop(0.5f)
-
-                constrain(greenBox) {
-                    top.linkTo(guideline)
-                    start.linkTo(parent.start)
-                    width = Dimension.value(100.dp)
-                    height = Dimension.value(100.dp)
-
-                }
-
-                constrain(blueBox) {
-                    top.linkTo(parent.top)
-                    start.linkTo(greenBox.end)
-                    end.linkTo(parent.end)
-                    width = Dimension.value(100.dp)
-                    height = Dimension.value(100.dp)
-
-                }
-                createHorizontalChain(greenBox,blueBox, chainStyle = ChainStyle.Packed)
-            }
-
-            ConstraintLayout(constraints,modifier = Modifier.fillMaxSize()) {
-                Box(
-                    modifier = Modifier
-                        .background(Color.Green)
-                        .layoutId("greenbox")
-                )
-
-                Box(
-                    modifier = Modifier
-                        .background(Color.Blue)
-                        .layoutId("bluebox")
-                )
-            }
 
         }
     }
@@ -69,4 +32,44 @@ class MainActivity : ComponentActivity() {
 
 /** Constraint Layout **/
 /**
+ * setContent {
+val constraints = ConstraintSet {
+val greenBox = createRefFor("greenbox")
+val blueBox = createRefFor("bluebox")
+val guideline = createGuidelineFromTop(0.5f)
+
+constrain(greenBox) {
+top.linkTo(guideline)
+start.linkTo(parent.start)
+width = Dimension.value(100.dp)
+height = Dimension.value(100.dp)
+
+}
+
+constrain(blueBox) {
+top.linkTo(parent.top)
+start.linkTo(greenBox.end)
+end.linkTo(parent.end)
+width = Dimension.value(100.dp)
+height = Dimension.value(100.dp)
+
+}
+createHorizontalChain(greenBox,blueBox, chainStyle = ChainStyle.Packed)
+}
+
+ConstraintLayout(constraints,modifier = Modifier.fillMaxSize()) {
+Box(
+modifier = Modifier
+.background(Color.Green)
+.layoutId("greenbox")
+)
+
+Box(
+modifier = Modifier
+.background(Color.Blue)
+.layoutId("bluebox")
+)
+}
+
+}
  **/
