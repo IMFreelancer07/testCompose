@@ -85,57 +85,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(color = Color.DarkGray, modifier = Modifier.fillMaxSize()) {
-                NavSplash()
-            }
         }
-    }
-}
-
-@Composable
-fun NavSplash() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "splash_screen") {
-        composable("splash_screen") {
-            Splash_screen(navController = navController)
-        }
-        composable("main_screen") {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text( text="Main Screen", color = Color.White)
-            }
-        }
-    }
-}
-
-@Composable
-fun Splash_screen(navController: NavController) {
-    val scale = remember {
-        Animatable(0f)
-    }
-    LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(
-                durationMillis = 500,
-                easing = {
-                    OvershootInterpolator(2f).getInterpolation(it)
-                }
-            )
-        )
-        delay(3000L)
-        navController.navigate("main_screen")
-    }
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo",
-            modifier = Modifier.scale(scale.value)
-        )
     }
 }
