@@ -45,49 +45,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var items by remember {
-                mutableStateOf(
-                    (1..20).map{
-                        ListItem(
-                            title = "Item # $it",
-                            isSelected = false
-                        )
-                    }
-                )
-            }
-             items.filter {it.isSelected}
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                items(items.size){i ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                items = items.mapIndexed { j, item ->
-                                    if(i==j) {
-                                        item.copy(isSelected = !item.isSelected)
-                                    } else item
-                                }
-                            }
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Text(items[i].title)
-                        if(items[i].isSelected){
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "Selected",
-                                tint = Color.Green,
-                                modifier = Modifier
-                                    .size(20.dp)
-                            )
-                        }
-                    }
-                }
-            }
+
         }
     }
 }
