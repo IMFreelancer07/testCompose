@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,15 +39,80 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val permissionState  = rememberMultiplePermissionsState(
+                permissions = listOf(
+                    android.Manifest.permission.RECORD_AUDIO,
+                    android.Manifest.permission.CAMERA
+                )
+            )
 
+            val lifeCycleOwner = LocalLifecycleOwner.current
+            DisposableEffect(key1 = lifeCycleOwner, effect = {
+                val observer = LifecycleEventObserver {_, even ->
+                    if(even == Lifecycle.Event.ON_RESUME) {
+                        permissionState.launchMultiplePermissionRequest()
+                    }
+                }
+                lifeCycleOwner.lifecycle.addObserver(observer)
+
+                onDispose {
+                    lifeCycleOwner.lifecycle.removeObserver(observer)
+                }
+            } )
+            
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                permissionState.permissions.forEach{permission ->
+                    when(permission.permission) {
+                        android.Manifest.permission.CAMERA -> {
+                            when {
+                                permission.hasPermission -> {
+                                    Text(text = "Camera Permission Accepted!")
+                                }
+                                permission.shouldShowRationale -> {
+                                    Text(text = "Camera Permission is Needed to execute Necessary Camera Functions!")
+                                }
+                                permission.isPermanentlyDenied()-> {
+                                    Text(text = "You've permanently denied Camera Permission, you need to enable it from settings.")
+                                }
+                            }
+                        }
+
+                        android.Manifest.permission.RECORD_AUDIO -> {
+                            when {
+                                permission.hasPermission -> {
+                                    Text(text = "Audio Recording Permission Accepted!")
+                                }
+                                permission.shouldShowRationale -> {
+                                    Text(text = "Audio Recording Permission is Needed to execute Necessary Camera Functions!")
+                                }
+                                permission.isPermanentlyDenied()-> {
+                                    Text(text = "You've permanently denied Audio Recording Permission, you need to enable it from settings.")
+                                }
+                            }
+                        }
+                    }
+                }
+                Text(text = "Record Audio Permission Accepted!")
+            }
         }
     }
 }
