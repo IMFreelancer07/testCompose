@@ -55,15 +55,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(
-                color = MaterialTheme.colorScheme.background,
-                modifier = Modifier
-                    .padding(
-                        MaterialTheme.spacing.medium
-                    )
-            ) {
-                
-            }
         }
     }
 }
