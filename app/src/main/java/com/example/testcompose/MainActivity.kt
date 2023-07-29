@@ -49,6 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
@@ -57,8 +58,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.testcompose.destinations.PostScreenDestination
-import com.example.testcompose.destinations.ProfileScreenDestination
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -72,6 +71,79 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val windowInfo = rememberWindowInfo()
+
+            if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(10) {
+                        Text(
+                            text = "List No. 1 item # $it",
+                            fontSize = 25.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Blue)
+                                .padding(16.dp)
+                        )
+                    }
+                }
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(10) {
+                        Text(
+                            text = "List No. 2 item # $it",
+                            fontSize = 25.sp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Yellow)
+                                .padding(16.dp)
+                        )
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        items(10) {
+                            Text(
+                                text = "List No. 1 item # $it",
+                                fontSize = 25.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.Blue)
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        items(10) {
+                            Text(
+                                text = "List No. 2 item # $it",
+                                fontSize = 25.sp,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color.Yellow)
+                                    .padding(16.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
