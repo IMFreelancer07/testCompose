@@ -57,8 +57,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.testcompose.destinations.PostScreenDestination
+import com.example.testcompose.destinations.ProfileScreenDestination
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import java.time.Instant
@@ -69,6 +72,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            DestinationsNavHost(navGraph = NavGraphs.root)
         }
     }
 }
@@ -84,6 +88,15 @@ fun LoginScreen(
     ) {
         Text("Login Screen")
         Button(onClick = {
+            navigator.navigate(
+                ProfileScreenDestination(
+                    User(
+                        name = "Syed",
+                        id = "userId",
+                        created = LocalDateTime.now()
+                    )
+                )
+            )
         }) {
             Text("Go to Profile Screen")
         }
@@ -104,7 +117,9 @@ fun ProfileScreen(
     ) {
         Text("Profile Screen: $user", textAlign = TextAlign.Center)
         Button(onClick = {
-
+            navigator.navigate(
+                PostScreenDestination()
+            )
         }) {
             Text("Go to Post Screen")
         }
