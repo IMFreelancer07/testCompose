@@ -1,8 +1,10 @@
 package com.example.testcompose
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.content.res.Resources.Theme
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -20,18 +22,30 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -63,14 +77,69 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    ModalDrawerSheet {
+                        DrawerHead()
+                        DrawerBody(
+                            items = listOf(
+                                MenuItems(
+                                    id = "home",
+                                    title = "Home",
+                                    contentDescription = "Go to home screen",
+                                    icon = Icons.Default.Home
+                                ),
+                                MenuItems(
+                                    id = "settings",
+                                    title = "Settings",
+                                    contentDescription = "Go to settings screen",
+                                    icon = Icons.Default.Settings
+                                ),
+                                MenuItems(
+                                    id = "help",
+                                    title = "Help",
+                                    contentDescription = "Get help",
+                                    icon = Icons.Default.Info
+                                ),
+                            ),
+                            onItemClick = {
+                                println("Clicked on ${it.title}")
+                            }
+                        )
+                    }
+                },
+            ) {
+                Scaffold(
+                    topBar = {
+                        AppBar(
+                            onNavigationIconClick = {
+                                scope.launch {
+                                    drawerState.apply {
+                                        if (isClosed) open() else close()
+                                    }
+                                }
+                            }
+                        )
+                    },
+                    ) {
+                    Text("Test!")
+                }
+            }
         }
     }
 }
