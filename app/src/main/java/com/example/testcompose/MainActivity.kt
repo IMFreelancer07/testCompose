@@ -93,23 +93,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(100.dp),
-                content = {
-                    items(100){item ->
-                        Box(
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(5.dp))
-                                .background(Color.DarkGray),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text("Item # $item")
-                        }
-                    }
-                }
-            )
         }
     }
 }
