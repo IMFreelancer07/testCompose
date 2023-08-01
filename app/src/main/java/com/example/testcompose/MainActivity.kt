@@ -88,58 +88,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-
-            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-            val scope = rememberCoroutineScope()
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    ModalDrawerSheet {
-                        DrawerHead()
-                        DrawerBody(
-                            items = listOf(
-                                MenuItems(
-                                    id = "home",
-                                    title = "Home",
-                                    contentDescription = "Go to home screen",
-                                    icon = Icons.Default.Home
-                                ),
-                                MenuItems(
-                                    id = "settings",
-                                    title = "Settings",
-                                    contentDescription = "Go to settings screen",
-                                    icon = Icons.Default.Settings
-                                ),
-                                MenuItems(
-                                    id = "help",
-                                    title = "Help",
-                                    contentDescription = "Get help",
-                                    icon = Icons.Default.Info
-                                ),
-                            ),
-                            onItemClick = {
-                                println("Clicked on ${it.title}")
-                            }
-                        )
-                    }
-                },
-            ) {
-                Scaffold(
-                    topBar = {
-                        AppBar(
-                            onNavigationIconClick = {
-                                scope.launch {
-                                    drawerState.apply {
-                                        if (isClosed) open() else close()
-                                    }
-                                }
-                            }
-                        )
-                    },
-                    ) {
-                    Text("Test!")
-                }
-            }
         }
     }
 }
