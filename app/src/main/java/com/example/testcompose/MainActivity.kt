@@ -95,6 +95,23 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            Column(
+                modifier = Modifier
+                .fillMaxSize(),
+                verticalArrangement =  Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                var count  by remember {
+                    mutableStateOf(0)
+                }
+                AnimatedCounter(
+                    count = count,
+                    style = MaterialTheme.typography.headlineLarge
+                )
+                Button(onClick = { count++ }) {
+                    Text("Increment")
+                }
+            }
         }
     }
 }
