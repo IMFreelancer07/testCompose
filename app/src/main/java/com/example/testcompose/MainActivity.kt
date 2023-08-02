@@ -95,47 +95,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "Home") {
-                composable("Home") {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Button(onClick = {
-                            navController.navigate("Detail")
-                        }) {
-                            Text("ToDetail")
-                        }
-                    }
-                }
-
-                composable(
-                    route = "Detail",
-                    deepLinks = listOf(
-                        navDeepLink {
-                            uriPattern = "https://www.github.com/{id}"
-                            action = Intent.ACTION_VIEW
-                        }
-                    ),
-                    arguments = listOf(
-                        navArgument("id") {
-                            type = NavType.IntType
-                            defaultValue = -1
-                        }
-                    )
-                ) { entry ->
-                    val id = entry.arguments?.getInt("id")
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ){
-                        Text("The GitHub id is $id")
-                    }
-                }
-            }
         }
     }
 }
