@@ -1,6 +1,7 @@
 package com.example.testcompose
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Resources
 import android.content.res.Resources.Theme
 import android.os.Bundle
@@ -77,6 +78,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -93,6 +95,47 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "Home") {
+                composable("Home") {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(onClick = {
+                            navController.navigate("Detail")
+                        }) {
+                            Text("ToDetail")
+                        }
+                    }
+                }
+
+                composable(
+                    route = "Detail",
+                    deepLinks = listOf(
+                        navDeepLink {
+                            uriPattern = "https://www.github.com/{id}"
+                            action = Intent.ACTION_VIEW
+                        }
+                    ),
+                    arguments = listOf(
+                        navArgument("id") {
+                            type = NavType.IntType
+                            defaultValue = -1
+                        }
+                    )
+                ) { entry ->
+                    val id = entry.arguments?.getInt("id")
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ){
+                        Text("The GitHub id is $id")
+                    }
+                }
+            }
         }
     }
 }
