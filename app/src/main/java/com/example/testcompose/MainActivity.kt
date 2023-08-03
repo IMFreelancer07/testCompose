@@ -103,41 +103,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Button(onClick = {
-                    })
-                     {
-                        Text(text = "SimpleBtn") //can be used for actions like "Confirm" etc.
-                    }
-                    ElevatedButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Outlined.Add,
-                            contentDescription = "ElevatedBtn Icon",
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text( text = "ElevatedBtn") //can be used for actions like "Add to Cart" or "Upload from Gallery"
-                    }
-                    FilledTonalButton(onClick = {}) {
-                        Text( text = "FilledTonalBtn") //can be used for actions like "Open in Browser"
-                    }
-                    OutlinedButton(onClick = {}) {
-                        Text( text = "OutlinedBtn") //can be used for actions like "Create new Account" / less prominent actions
-                    }
-                    TextButton(onClick = {}) {
-                        Text( text = "TextBtn")  //can be used for actions like "Learn more" / clicking on links etc.
-
-                    }
-                }
-            }
         }
     }
 }
+
+//Material3UX-Topic!
