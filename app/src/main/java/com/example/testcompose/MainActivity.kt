@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -28,6 +29,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -35,6 +38,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.MonitorWeight
+import androidx.compose.material.icons.outlined.Percent
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerValue
@@ -42,14 +47,17 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -74,6 +82,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -103,6 +114,118 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                Column (
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    var filledText by remember {
+                        mutableStateOf("")
+                    }
+                    TextField(
+                        value = filledText,
+                        onValueChange = {filledText = it},
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.Right
+                        ),
+                        //Use either label or placeHolder; both do the same
+                        label = {
+                            Text("This is a simple text field")
+                        },
+                        placeholder = {
+                            Text("This text place holder")
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.MonitorWeight,
+                                contentDescription = "Weight"
+                            )  // can use images as far as size is 26.dp
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Percent,
+                                contentDescription = "Weight"
+                            )  // can use images as far as size is 26.dp
+                        },
+                        prefix = {
+                            Text("$")
+                        },
+                        suffix = {
+                            Text("!")
+                        },
+                        supportingText = {
+                            Text("*required")
+                        },
+                        isError = false,
+//                        visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Done
+                    ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                Toast.makeText(this@MainActivity,"Done!",Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    )
+                    
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    var outlinedTextField by remember {
+                        mutableStateOf("")
+                    }
+                    OutlinedTextField(
+                        value = outlinedTextField,
+                        onValueChange = {outlinedTextField = it},
+                        textStyle = LocalTextStyle.current.copy(
+                            textAlign = TextAlign.Right
+                        ),
+                        //Use either label or placeHolder; both do the same
+                        label = {
+                            Text("This is a simple text field")
+                        },
+                        placeholder = {
+                            Text("This text place holder")
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.MonitorWeight,
+                                contentDescription = "Weight"
+                            )  // can use images as far as size is 26.dp
+                        },
+                        trailingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Percent,
+                                contentDescription = "Weight"
+                            )  // can use images as far as size is 26.dp
+                        },
+                        prefix = {
+                            Text("$")
+                        },
+                        suffix = {
+                            Text("!")
+                        },
+                        supportingText = {
+                            Text("*required")
+                        },
+                        isError = false,
+//                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Go
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onGo = {
+                                Toast.makeText(this@MainActivity,"Go...!",Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    )
+                }
+            }
         }
     }
 }
