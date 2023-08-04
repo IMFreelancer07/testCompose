@@ -6,6 +6,7 @@ import android.content.res.Resources
 import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
@@ -42,6 +44,7 @@ import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.Percent
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -53,16 +56,20 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
@@ -82,6 +89,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -118,8 +126,185 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    CheckBoxes()
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    MySwitch()
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    RadioBtns()
+                }
             }
         }
+    }
+}
+
+data class ToggleableInfo(
+    val isChecked: Boolean,
+    val text: String
+)
+
+@Composable
+private fun CheckBoxes() {
+    val checkboxes = remember {
+        mutableStateListOf(
+            ToggleableInfo(
+                isChecked = false,
+                text = "Photos"
+            ),
+            ToggleableInfo(
+                isChecked = false,
+                text = "Videos"
+            ),
+            ToggleableInfo(
+                isChecked = false,
+                text = "Docs"
+            )
+        )
+    }
+
+    var triState by remember {
+        mutableStateOf(ToggleableState.Indeterminate)
+    }
+    val toggleTriState = {
+        triState = when (triState) {
+            ToggleableState.Indeterminate -> ToggleableState.On
+            ToggleableState.On -> ToggleableState.Off
+            else -> ToggleableState.On
+        }
+        checkboxes.indices.forEach { index ->
+            checkboxes[index] = checkboxes[index].copy(
+                isChecked = triState == ToggleableState.On
+            )
+        }
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clickable {
+                toggleTriState()
+            }
+            .padding(end = 16.dp)
+    ) {
+        TriStateCheckbox(
+            state = triState,
+            onClick = toggleTriState
+        )
+        Text(text = "File types")
+    }
+
+    checkboxes.forEachIndexed { index, info ->
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(start = 32.dp)
+                .clickable {
+                    checkboxes[index] = info.copy(
+                        isChecked = !info.isChecked
+                    )
+                }
+                .padding(end = 16.dp)
+        ) {
+            Checkbox(
+                checked = info.isChecked,
+                onCheckedChange = { isChecked ->
+                    checkboxes[index] = info.copy(
+                        isChecked = isChecked
+                    )
+                }
+            )
+            Text(text = info.text)
+        }
+    }
+}
+
+@Composable
+private fun RadioBtns() {
+    val radioBtnsState = remember {
+        mutableStateListOf(
+            ToggleableInfo(
+                isChecked = true,
+                text = "Photos"
+            ),
+            ToggleableInfo(
+                isChecked = false,
+                text = "Videos"
+            ),
+            ToggleableInfo(
+                isChecked = false,
+                text = "Docs"
+            )
+        )
+    }
+
+    radioBtnsState.forEachIndexed { index, info ->
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable {
+                    radioBtnsState.replaceAll{
+                        it.copy(
+                            isChecked = it.text == info.text
+                        )
+                    }
+                }
+                .padding(end = 16.dp)
+        ) {
+            RadioButton(
+                selected  = info.isChecked,
+                onClick  = {
+                    radioBtnsState.replaceAll{
+                        it.copy(
+                            isChecked = it.text == info.text
+                        )
+                    }
+                }
+            )
+            Text(text = info.text)
+        }
+    }
+}
+
+@Composable
+private fun MySwitch() {
+    var switch by remember {
+        mutableStateOf(
+            ToggleableInfo(
+                isChecked = false,
+                text = "Dark Mode"
+            )
+        )
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = switch.text)
+        Spacer(modifier = Modifier.weight(1f))
+        Switch(
+            checked = switch.isChecked,
+            onCheckedChange = { isChecked ->
+                switch = switch.copy(
+                    isChecked = isChecked
+                )
+            },
+            thumbContent = {
+                Icon(
+                    imageVector = if (switch.isChecked) {
+                        Icons.Default.Check
+                    } else {
+                        Icons.Default.Close
+                    },
+                    contentDescription = null
+                )
+            }
+        )
     }
 }
 
