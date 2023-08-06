@@ -131,8 +131,6 @@ import java.time.ZoneId
 
 class MainActivity : ComponentActivity() {
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -141,44 +139,6 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                Scaffold (
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    bottomBar = {
-                        BottomAppBar(
-                            actions = {
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Share,
-                                        contentDescription = "ShareBtn"
-                                    )
-                                }
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.FavoriteBorder,
-                                        contentDescription = "MarkFavourite"
-                                    )
-                                }
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Email,
-                                        contentDescription = "EmailNow"
-                                    )
-                                }
-                            },
-                            floatingActionButton = {
-                                FloatingActionButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Call,
-                                        contentDescription = "CallNow"
-                                    )
-                                }
-                            }
-                        )
-                    }
-                ) {
-
-                }
             }
         }
     }
