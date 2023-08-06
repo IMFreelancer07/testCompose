@@ -55,6 +55,7 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -134,56 +135,6 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(scrollBehaviour.nestedScrollConnection),
-                    topBar = {
-                        TopAppBar(
-                            title = {
-                                Text(text = "MyNotes")
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {}) {
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowBack,
-                                        contentDescription = "GoBack"
-                                    )
-                                }
-                            },
-                            actions = {
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.FavoriteBorder,
-                                        contentDescription = "MarkFavourite"
-                                    )
-                                }
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = Icons.Default.Edit,
-                                        contentDescription = "Edit"
-                                    )
-                                }
-                            },
-                            scrollBehavior = scrollBehaviour
-                        )
-                    }
-                ) { values ->
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(values)
-                    ) {
-                        items(100) {
-                            Text(
-                                text = "Item # $it",
-                                modifier = Modifier
-                                    .padding(16.dp)
-                            )
-                        }
-                    }
-                }
             }
         }
     }
