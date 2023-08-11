@@ -43,11 +43,17 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Message
 import androidx.compose.material.icons.outlined.MonitorWeight
 import androidx.compose.material.icons.outlined.Percent
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -65,6 +71,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -87,6 +95,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -95,6 +104,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -129,16 +139,93 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
+
+data class BottomNavItems(
+    val title: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val hasNews: Boolean,
+    val badgeCount: Int? = null
+
+)
+
 class MainActivity : ComponentActivity() {
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+
+            val items = listOf(
+                BottomNavItems(
+                    title = "Home",
+                    selectedIcon = Icons.Filled.Home,
+                    unselectedIcon = Icons.Outlined.Home,
+                    hasNews = false,
+                ),
+                BottomNavItems(
+                    title = "Chats",
+                    selectedIcon = Icons.Filled.Message,
+                    unselectedIcon = Icons.Outlined.Message,
+                    hasNews = false,
+                    badgeCount = 50
+                ),
+                BottomNavItems(
+                    title = "Settings",
+                    selectedIcon = Icons.Filled.Settings,
+                    unselectedIcon = Icons.Outlined.Settings,
+                    hasNews = true,
+                )
+            )
+
+            var selectedItemIndex by rememberSaveable {
+                mutableStateOf(0)
+            }
+
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
+                Scaffold(
+                    bottomBar = {
+                        NavigationBar {
+                            items.forEachIndexed { index, item ->
+                                NavigationBarItem(
+                                    selected = selectedItemIndex == index,
+                                    onClick = {
+                                        selectedItemIndex = index
+//                                        navController.navigate(item.title)
+                                    },
+                                    label = { Text(item.title) },
+                                    icon = {
+                                        BadgedBox(
+                                            badge = {
+                                                if (item.badgeCount != null) {
+                                                    Badge {
+                                                        Text(text = item.badgeCount.toString())
+                                                    }
+                                                } else if (item.hasNews) {
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = if (index == selectedItemIndex) {
+                                                    item.selectedIcon
+                                                } else {
+                                                    item.unselectedIcon
+                                                },
+                                                contentDescription = item.title
+                                            )
+
+                                        }
+                                    })
+                            }
+                        }
+                    }
+                ) {}
             }
         }
     }
