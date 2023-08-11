@@ -140,92 +140,19 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 
 
-data class BottomNavItems(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-
-)
 
 class MainActivity : ComponentActivity() {
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-    @OptIn(ExperimentalMaterial3Api::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-
-            val items = listOf(
-                BottomNavItems(
-                    title = "Home",
-                    selectedIcon = Icons.Filled.Home,
-                    unselectedIcon = Icons.Outlined.Home,
-                    hasNews = false,
-                ),
-                BottomNavItems(
-                    title = "Chats",
-                    selectedIcon = Icons.Filled.Message,
-                    unselectedIcon = Icons.Outlined.Message,
-                    hasNews = false,
-                    badgeCount = 50
-                ),
-                BottomNavItems(
-                    title = "Settings",
-                    selectedIcon = Icons.Filled.Settings,
-                    unselectedIcon = Icons.Outlined.Settings,
-                    hasNews = true,
-                )
-            )
-
-            var selectedItemIndex by rememberSaveable {
-                mutableStateOf(0)
-            }
-
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                Scaffold(
-                    bottomBar = {
-                        NavigationBar {
-                            items.forEachIndexed { index, item ->
-                                NavigationBarItem(
-                                    selected = selectedItemIndex == index,
-                                    onClick = {
-                                        selectedItemIndex = index
-//                                        navController.navigate(item.title)
-                                    },
-                                    label = { Text(item.title) },
-                                    icon = {
-                                        BadgedBox(
-                                            badge = {
-                                                if (item.badgeCount != null) {
-                                                    Badge {
-                                                        Text(text = item.badgeCount.toString())
-                                                    }
-                                                } else if (item.hasNews) {
-                                                    Badge()
-                                                }
-                                            }
-                                        ) {
-                                            Icon(
-                                                imageVector = if (index == selectedItemIndex) {
-                                                    item.selectedIcon
-                                                } else {
-                                                    item.unselectedIcon
-                                                },
-                                                contentDescription = item.title
-                                            )
 
-                                        }
-                                    })
-                            }
-                        }
-                    }
-                ) {}
             }
         }
     }
