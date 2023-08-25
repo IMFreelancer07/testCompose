@@ -42,122 +42,18 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 
-data class NavigationItem(
-    val title: String,
-    val unSelectedIcon: ImageVector,
-    val selectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
-
 class MainActivity : ComponentActivity() {
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
 
-            val items = listOf(
-                NavigationItem(
-                    title = "Home",
-                    selectedIcon = Icons.Filled.Home,
-                    unSelectedIcon = Icons.Outlined.Home,
-                    hasNews = false,
-                ),
-                NavigationItem(
-                    title = "Chats",
-                    selectedIcon = Icons.Filled.Message,
-                    unSelectedIcon = Icons.Outlined.Message,
-                    hasNews = false,
-                    badgeCount = 50
-                ),
-                NavigationItem(
-                    title = "Settings",
-                    selectedIcon = Icons.Filled.Settings,
-                    unSelectedIcon = Icons.Outlined.Settings,
-                    hasNews = true,
-                )
-            )
-
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
-                var selectedItemIndex by rememberSaveable {
-                    mutableStateOf(0)
-                }
-                /**
-                PermanentNavigationDrawer // used for showing permanently; just have to replace with ModalNavigationDrawer
-                                            and have to comment the Navigationstate as there is no need to open/close it.
-                **/
-                /**
-                DismissibleNavigationDrawer // a mixup of Modal and Permanent Drawer; But can be dismissed,
-                                                as we can't in case of Permanent one.
-                DismissibleDrawerSheet // This one will replace ModalDrawerSheet.
-                 **/
-
-                ModalNavigationDrawer(
-                    drawerContent = {
-                        ModalDrawerSheet {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            items.forEachIndexed { index, navigationItem ->
-                                NavigationDrawerItem(
-                                    label = { Text(text = navigationItem.title) },
-                                    selected = index == selectedItemIndex,
-                                    onClick = {
-                                        selectedItemIndex = index
-                                        scope.launch {
-                                            drawerState.close()
-                                        }
-                                    },
-                                    icon = {
-                                        Icon(
-                                            imageVector = if (index == selectedItemIndex) {
-                                                navigationItem.selectedIcon
-                                            } else navigationItem.unSelectedIcon,
-                                            contentDescription = navigationItem.title
-                                        )
-                                    },
-                                    badge = {
-                                        navigationItem.badgeCount?.let {
-                                            Text(text = navigationItem.badgeCount.toString())
-                                        }
-                                    },
-                                    modifier = Modifier
-                                        .padding(NavigationDrawerItemDefaults.ItemPadding)
-                                )
-                            }
-                        }
-                    },
-                    drawerState = drawerState,
-                ) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(text = "NavDrawer")
-                                },
-                                navigationIcon = {
-                                    IconButton(onClick = {
-                                        scope.launch {
-                                            drawerState.open()
-                                        }
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Menu,
-                                            contentDescription = "Menu"
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    ) {
-
-                    }
-                }
+                Text("Work in Progress...")
             }
         }
     }
