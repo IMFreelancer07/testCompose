@@ -69,30 +69,33 @@ class MainActivity : ComponentActivity() {
                     mutableStateOf(false)
                 }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(onClick = {
-                        isSheetOpen = true
-                    }) {
-                        Text(text = "viewSheet")
-                    }
-                }
-                if (isSheetOpen) {
+                val scope = rememberCoroutineScope()
 
-                    ModalBottomSheet(
-                        sheetState = sheetState,
-                        onDismissRequest = {
-                            isSheetOpen = false
-                        }
-                    ) {
+                var scaffoldState = rememberBottomSheetScaffoldState()
+
+                BottomSheetScaffold(
+                    scaffoldState = scaffoldState,
+                    sheetContent = {
                         Image(
                             painter = painterResource(id = R.drawable.logo),
                             contentDescription = null
                         )
                         Text(text = "Hi I am Mobile App Developer :) ")
+                    },
+                    sheetPeekHeight = 0.dp
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(onClick = {
+                            scope.launch {
+                                    scaffoldState.bottomSheetState.expand()
+                            }
+                        }) {
+                            Text(text = "viewSheet")
+                        }
                     }
                 }
             }
